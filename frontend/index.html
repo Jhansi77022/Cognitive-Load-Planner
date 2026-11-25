@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Cognitive Load Planner</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<header class="top">
+  <div>
+    <h1>Cognitive Load Planner</h1>
+    <p class="sub">Your tasks, ordered so hard work and deadlines stay balanced. Tick a task off or add new ones and the plan rebuilds instantly.</p>
+  </div>
+  <div class="top-actions">
+    <button class="ghost" id="btn-seed">Load sample student data</button>
+    <button class="ghost danger" id="btn-reset">Clear all</button>
+  </div>
+</header>
+
+<section id="stats" class="stats" aria-live="polite"></section>
+<div id="alert" class="alert" hidden></div>
+
+<main class="grid">
+  <aside class="col">
+    <form id="task-form" class="panel" autocomplete="off">
+      <h2 id="form-title">Add a task</h2>
+      <label>Title <input name="title" required maxlength="120" placeholder="e.g. Chemistry midterm"></label>
+      <div class="row">
+        <label>Type
+          <select name="type">
+            <option value="assignment">Assignment</option>
+            <option value="exam">Exam</option>
+            <option value="project">Project</option>
+            <option value="other">Other</option>
+          </select>
+        </label>
+        <label>Deadline <input type="date" name="deadline" required></label>
+      </div>
+      <div class="row">
+        <label>Effort (hours) <input type="number" name="effort_hours" min="0.25" step="0.25" value="2" required></label>
+      </div>
+      <label>Complexity <output id="o-cx">5</output>
+        <input type="range" name="complexity" min="1" max="10" value="5"></label>
+      <label>Cognitive load <output id="o-cog">5</output>
+        <input type="range" name="cognitive_load" min="1" max="10" value="5"></label>
+      <label>Depends on <span class="hint">(must finish first; hold Ctrl/Cmd for several)</span>
+        <select name="depends_on" multiple size="4"></select></label>
+      <div class="row">
+        <button type="submit" class="primary" id="btn-save">Add task</button>
+        <button type="button" class="ghost" id="btn-cancel" hidden>Cancel edit</button>
+      </div>
+      <p id="form-msg" class="msg" role="status"></p>
+    </form>
+
+    <form id="settings-form" class="panel">
+      <h2>Your capacity</h2>
+      <label>Study hours per day <input type="number" name="hours_per_day" min="1" max="16" step="0.5"></label>
+      <label>Comfortable mental load <output id="o-cap"></output>
+        <input type="range" name="max_cognitive" min="2" max="10" step="0.5"></label>
+      <label>Longest single session (hours) <input type="number" name="max_session_hours" min="0.5" max="8" step="0.5"></label>
+      <label class="check"><input type="checkbox" name="skip_weekends"> Keep weekends free</label>
+      <button type="submit" class="ghost">Save and replan</button>
+    </form>
+  </aside>
+
+  <section class="col">
+    <div class="panel">
+      <h2>To do <span id="count-pending" class="pill"></span></h2>
+      <ul id="pending" class="tasks"></ul>
+      <p id="pending-empty" class="empty" hidden>Nothing pending. Add a task, or load the sample data to see how it works.</p>
+    </div>
+    <details class="panel" id="done-wrap">
+      <summary>Completed <span id="count-done" class="pill"></span></summary>
+      <ul id="done" class="tasks"></ul>
+    </details>
+  </section>
+
+  <section class="col wide">
+    <div class="panel">
+      <h2>Next up</h2>
+      <div id="today"></div>
+    </div>
+    <div class="panel">
+      <h2>Day by day</h2>
+      <p class="hint">Each bar shows the day's average mental demand against your comfortable level (the marker).</p>
+      <div id="days"></div>
+    </div>
+  </section>
+</main>
+<script src="app.js"></script>
+</body>
+</html>
